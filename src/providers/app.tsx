@@ -1,3 +1,4 @@
+import { NotificationsProvider } from '@mantine/notifications';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useRouter } from 'next/router';
@@ -23,10 +24,12 @@ const ErrorFallback = () => {
 export const AppProvider = ({ children }: AppProviderProps) => {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <QueryClientProvider client={queryClient}>
-        {children}
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
+      <NotificationsProvider limit={5}>
+        <QueryClientProvider client={queryClient}>
+          {children}
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </NotificationsProvider>
     </ErrorBoundary>
   );
 };
