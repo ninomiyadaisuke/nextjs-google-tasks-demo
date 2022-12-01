@@ -1,4 +1,5 @@
 import { NotificationsProvider } from '@mantine/notifications';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useRouter } from 'next/router';
@@ -23,13 +24,15 @@ const ErrorFallback = () => {
 
 export const AppProvider = ({ children }: AppProviderProps) => {
   return (
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <NotificationsProvider limit={5}>
-        <QueryClientProvider client={queryClient}>
-          {children}
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </NotificationsProvider>
-    </ErrorBoundary>
+    <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_CLIENT_ID as string}>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <NotificationsProvider limit={5}>
+          <QueryClientProvider client={queryClient}>
+            {children}
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
+        </NotificationsProvider>
+      </ErrorBoundary>
+    </GoogleOAuthProvider>
   );
 };
