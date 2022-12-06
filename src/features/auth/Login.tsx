@@ -1,15 +1,10 @@
 import { GoogleLogin } from '@react-oauth/google';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
 
 const Login: FC = () => {
-  const { user, login, logout } = useAuth();
-  const [showChild, setShowChild] = useState(false);
-
-  useEffect(() => {
-    setShowChild(true);
-  }, []);
+  const { user, showChild, login, logout } = useAuth();
 
   if (!showChild) {
     return null;
@@ -25,6 +20,7 @@ const Login: FC = () => {
           onError={() => {
             alert('Login Failed');
           }}
+          useOneTap
         />
       ) : (
         <>
