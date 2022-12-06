@@ -1,14 +1,19 @@
-import { useAtom, useAtomValue } from 'jotai';
-import { RESET } from 'jotai/utils';
 import type { NextPage } from 'next';
 
-import { authAtom } from '@/contexts/authContext';
-import { GoogleResponse } from '@/types/user';
+import AuthGuard from '@/components/utils/AuthGuard';
+import { useAuth } from '@/hooks/useAuth';
 
 const Home: NextPage = () => {
-  const [user, setUser] = useAtom(authAtom);
+  const { logout } = useAuth();
 
-  return <div>{user && <button onClick={() => setUser(RESET)}>ログアウト</button>}</div>;
+  return (
+    <AuthGuard>
+      <>
+        <p>Top page</p>
+        <button onClick={() => logout()}>ログアウト</button>
+      </>
+    </AuthGuard>
+  );
 };
 
 export default Home;
