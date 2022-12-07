@@ -20,6 +20,16 @@ const Form = <TFormValues extends Record<string, unknown>, Schema extends AnyObj
     resolver: schema && yupResolver(schema),
   });
 
+  const {
+    reset,
+    formState: { isSubmitSuccessful },
+  } = methods;
+
+  useEffect(() => {
+    if (!isSubmitSuccessful) return;
+    reset();
+  }, [isSubmitSuccessful, reset]);
+
   return (
     <form id={id} onSubmit={methods.handleSubmit(onSubmit)}>
       {children(methods)}
