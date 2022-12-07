@@ -16,4 +16,9 @@ export type GoogleResponse = {
   sub: string;
 };
 
-export type User = Pick<GoogleResponse, 'email' | 'email_verified' | 'family_name' | 'given_name' | 'name' | 'picture'>;
+export type User = Pick<
+GoogleResponse,
+'email' | 'email_verified' | 'family_name' | 'given_name' | 'name' | 'picture'
+> & {
+  token: string | undefined;
+};
