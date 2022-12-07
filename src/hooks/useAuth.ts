@@ -33,6 +33,7 @@ export const useAuth = () => {
       given_name: userData.given_name,
       name: userData.name,
       picture: userData.picture,
+      token: res.credential,
     });
     router.push('/');
   };
@@ -41,5 +42,5 @@ export const useAuth = () => {
     setUser(RESET);
   };
 
-  return { router, user, showChild, authenticatedUserChecked, login, logout };
+  return { router, user, showChild, accessToken: user?.token, authenticatedUserChecked, login, logout };
 };
