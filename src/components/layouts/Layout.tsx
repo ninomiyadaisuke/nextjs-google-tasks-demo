@@ -1,7 +1,10 @@
 import { Container, Header, Title } from '@mantine/core';
+import dynamic from 'next/dynamic';
 import { FC, ReactNode } from 'react';
 
-import { AuthGuard } from '../utils';
+const AuthGuard = dynamic(() => import('@/components/utils').then((mod) => mod.AuthGuard), {
+  ssr: false,
+});
 
 type Props = {
   children: ReactNode;

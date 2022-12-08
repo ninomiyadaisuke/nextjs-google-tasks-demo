@@ -1,4 +1,4 @@
-import type { UseQueryOptions } from '@tanstack/react-query';
+import { useMutation, UseMutationOptions, useQueryClient, UseQueryOptions } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
 
 import { useAuth } from '@/hooks/useAuth';
@@ -16,4 +16,59 @@ export const useApi = <
   const { accessToken } = useAuth();
 
   return useQuery({ queryKey, queryFn: async () => fetcher(queryKey[1], accessToken || ''), ...options });
+};
+
+export const useOptimisticMutation = <TVariables, TData, TContext>(
+  queryKey: [string, Record<string, unknown>?],
+  fetcher: (params: TVariables, token: string) => Promise<TData | void>,
+  updater?: ((oldData: TContext, newData: TVariables) => TContext) | undefined,
+  options?: Omit<UseMutationOptions<TData | void, unknown, TVariables, TContext>, 'onMutate' | 'onError' | 'onSettled'>,
+) => {
+  const { accessToken } = useAuth();
+
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    async (params) => {
+      return fetcher(params, accessToken || '');
+    },
+    {
+      onMutate: async (data) => {
+        await queryClient.cancelQueries(queryKey);
+
+        const previousData = queryClient.getQueryData<TContext>(queryKey);
+
+        if (previousData && updater) {
+          queryClient.setQueryData<TContext>(queryKey, () => {
+            return updater(previousData, data);
+          });
+          // updaterなしの場合を検討
+          // queryClient.setQueryData(queryKey, data);
+        }
+
+        return previousData;
+      },
+      onError: (err, _, context) => {
+        queryClient.setQueryData(queryKey, context);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries(queryKey);
+      },
+      ...options,
+    },
+  );
+};
+
+export const useGenericMutation = <TVariables, TData, TContext>(
+  fetcher: (params: TVariables, token: string) => Promise<TData | void>,
+  options?: UseMutationOptions<TData | void, unknown, TVariables, TContext>,
+) => {
+  const { accessToken } = useAuth();
+
+  return useMutation(
+    async (params: TVariables) => {
+      return fetcher(params, accessToken || '');
+    },
+    { ...options },
+  );
 };
