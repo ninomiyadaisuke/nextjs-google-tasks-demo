@@ -4,11 +4,7 @@ import { FC } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 
 const Login: FC = () => {
-  const { user, showChild, login, logout } = useAuth();
-
-  if (!showChild) {
-    return null;
-  }
+  const { user, login, logout } = useAuth();
 
   return (
     <>

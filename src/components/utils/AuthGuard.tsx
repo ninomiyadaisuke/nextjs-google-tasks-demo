@@ -7,11 +7,7 @@ type Props = {
 };
 
 const AuthGuard: FC<Props> = ({ children }) => {
-  const { user, showChild, authenticatedUserChecked } = useAuth();
-
-  if (!showChild) {
-    return null;
-  }
+  const { user, authenticatedUserChecked } = useAuth();
 
   authenticatedUserChecked();
 
