@@ -15,7 +15,7 @@ import type {
 
 export const tasksRepository: TasksRepository = {
   getTaskLists: async (params?: GetTaskListsParams, token?: string): Promise<TaskList[]> => {
-    const response = await api.get<TaskListsResponse>('https://tasks.googleapis.com/tasks/v1/users/@me/lists', {
+    const response = await api.get('https://tasks.googleapis.com/tasks/v1/users/@me/lists', {
       params: {
         ...params,
       },
@@ -23,6 +23,7 @@ export const tasksRepository: TasksRepository = {
         Authorization: `Bearer ${token}`,
       },
     });
+
     return response.data.items;
   },
   getTasks: async (params: GetTasksParams, token: string): Promise<Task[]> => {

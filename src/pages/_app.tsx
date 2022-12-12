@@ -1,17 +1,25 @@
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { SessionProvider } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
 import { AppProvider } from '@/providers/app';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const router = useRouter();
-  const { user } = useAuth();
+  // const [ready, setReady] = useState(false);
+  // const router = useRouter();
+  // useEffect(() => {
+  //   if (router.isReady) {
+  //     setReady(true);
+  //   }
+  // }, [router.isReady]);
 
   return (
     <AppProvider>
-      <Component {...pageProps} />
+      <SessionProvider session={pageProps.session}>
+        <Component {...pageProps} />
+      </SessionProvider>
     </AppProvider>
   );
 }

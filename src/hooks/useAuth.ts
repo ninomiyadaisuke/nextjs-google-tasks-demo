@@ -3,7 +3,6 @@ import { useAtom } from 'jotai';
 import { RESET } from 'jotai/utils';
 import jwtDecode from 'jwt-decode';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 
 import { authAtom } from '@/contexts/authContext';
 import { GoogleResponse } from '@/types/user';
@@ -11,12 +10,6 @@ import { GoogleResponse } from '@/types/user';
 export const useAuth = () => {
   const [user, setUser] = useAtom(authAtom);
   const router = useRouter();
-
-  const [showChild, setShowChild] = useState(false);
-
-  useEffect(() => {
-    setShowChild(true);
-  }, []);
 
   const authenticatedUserChecked = async () => {
     if (!user) {
@@ -26,6 +19,7 @@ export const useAuth = () => {
 
   const login = (res: CredentialResponse) => {
     const userData = jwtDecode<GoogleResponse>(res.credential as string);
+
     setUser({
       email: userData.email,
       email_verified: userData.email_verified,
@@ -42,5 +36,5 @@ export const useAuth = () => {
     setUser(RESET);
   };
 
-  return { router, user, showChild, accessToken: user?.token, authenticatedUserChecked, login, logout };
+  return { router, user, accessToken: user?.token, authenticatedUserChecked, login, logout };
 };
