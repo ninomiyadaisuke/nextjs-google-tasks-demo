@@ -13,7 +13,7 @@ export const useAuth = () => {
 
   const authenticatedUserChecked = async () => {
     if (!user) {
-      await router.push('/login');
+      await router.push('/api/auth/signin');
     }
   };
 
