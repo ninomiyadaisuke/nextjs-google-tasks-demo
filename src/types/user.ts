@@ -1,11 +1,3 @@
-import { DefaultSession } from 'next-auth';
-
-export interface Session {
-  user: {
-    accessToken?: string;
-  } & DefaultSession['user'];
-}
-
 export type GoogleResponse = {
   aud: string;
   azp: string;
