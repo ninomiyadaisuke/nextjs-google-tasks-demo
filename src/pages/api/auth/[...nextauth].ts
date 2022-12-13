@@ -1,5 +1,6 @@
 import NextAuth from 'next-auth/next';
 import GoogleProvider from 'next-auth/providers/google';
+import { signIn } from 'next-auth/react';
 
 export default NextAuth({
   providers: [
@@ -16,9 +17,6 @@ export default NextAuth({
     async jwt({ token, account }) {
       if (account) token.accessToken = account.access_token;
       return token;
-    },
-    async redirect({ baseUrl }) {
-      return baseUrl;
     },
   },
   secret: 'secret',

@@ -1,41 +1,40 @@
+import { TokenResponse } from '@react-oauth/google';
+import axios, { AxiosResponse } from 'axios';
+import { useAtom } from 'jotai';
+import { RESET } from 'jotai/utils';
 import { useRouter } from 'next/router';
-import { signOut, useSession } from 'next-auth/react';
+
+import { authAtom } from '@/contexts/authContext';
+import { User } from '@/types/user';
 
 export const useAuth = () => {
-  const { data: session, status } = useSession();
+  const [user, setUser] = useAtom(authAtom);
+
   const router = useRouter();
 
-  const user = session?.user;
-
-  const accessToken = session?.user.accessToken;
   const authenticatedUserChecked = async () => {
-    if (status === 'unauthenticated' || !status) {
-      await router.push('/api/auth/signin');
+    if (!user) {
+      await router.push('/login');
     }
   };
-  return { router, user, accessToken, authenticatedUserChecked, signOut };
+
+  const login = async (res: TokenResponse) => {
+    const userInfo: AxiosResponse<User, any> = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${res.access_token}` },
+    });
+    userInfo.data.accessToken = res.access_token;
+    setUser(userInfo.data);
+    router.push('/');
+  };
+
+  const logout = () => {
+    setUser(RESET);
+  };
+  return { login, logout, user, authenticatedUserChecked, accessToken: user?.accessToken };
 };
 
 // import { CredentialResponse } from '@react-oauth/google';
-// import { useAtom } from 'jotai';
-// import { RESET } from 'jotai/utils';
 // import jwtDecode from 'jwt-decode';
-// import { authAtom } from '@/contexts/authContext';
 // import { GoogleResponse } from '@/types/user';
-// const [user, setUser] = useAtom(authAtom);
-// const login = (res: CredentialResponse) => {
-//   const userData = jwtDecode<GoogleResponse>(res.credential as string);
-//   setUser({
-//     email: userData.email,
-//     email_verified: userData.email_verified,
-//     family_name: userData.family_name,
-//     given_name: userData.given_name,
-//     name: userData.name,
-//     picture: userData.picture,
-//     token: res.credential,
-//   });
-//   router.push('/');
-// };
-// const logout = () => {
-//   setUser(RESET);
-// };
+
+// const userData = jwtDecode<GoogleResponse>(res.credential as string);

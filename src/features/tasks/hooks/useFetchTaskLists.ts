@@ -1,5 +1,4 @@
 import { useApi } from '@/hooks/useApi';
-import { useAuth } from '@/hooks/useAuth';
 
 import { tasksRepository } from '../tasksRepository';
 
