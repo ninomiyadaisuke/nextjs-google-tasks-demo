@@ -1,9 +1,5 @@
 import type { AppProps } from 'next/app';
-import { useRouter } from 'next/router';
-import { SessionProvider } from 'next-auth/react';
-import { useEffect, useState } from 'react';
 
-import { useAuth } from '@/hooks/useAuth';
 import { AppProvider } from '@/providers/app';
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -17,9 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <AppProvider>
-      <SessionProvider session={pageProps.session}>
-        <Component {...pageProps} />
-      </SessionProvider>
+      <Component {...pageProps} />
     </AppProvider>
   );
 }
