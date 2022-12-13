@@ -1,4 +1,3 @@
-import { useSession } from 'next-auth/react';
 import { FC, ReactNode } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
@@ -8,12 +7,11 @@ type Props = {
 };
 
 const AuthGuard: FC<Props> = ({ children }) => {
-  const { user, authenticatedUserChecked } = useAuth();
-  const { data: session } = useSession();
+  const { user, authenticatedUserChecked, router } = useAuth();
 
   authenticatedUserChecked();
 
-  return <>{session && <>{children}</>}</>;
+  return <>{user && <>{children}</>}</>;
 };
 
 export default AuthGuard;

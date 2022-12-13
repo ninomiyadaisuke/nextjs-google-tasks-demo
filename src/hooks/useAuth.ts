@@ -2,12 +2,14 @@ import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
 
 export const useAuth = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
+
   const user = session?.user;
+
   const accessToken = session?.user.accessToken;
   const authenticatedUserChecked = async () => {
-    if (!session) {
+    if (status === 'unauthenticated' || !status) {
       await router.push('/api/auth/signin');
     }
   };

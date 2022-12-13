@@ -17,6 +17,9 @@ export default NextAuth({
       if (account) token.accessToken = account.access_token;
       return token;
     },
+    async redirect({ baseUrl }) {
+      return baseUrl;
+    },
   },
   secret: 'secret',
 });
