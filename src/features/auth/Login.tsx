@@ -1,4 +1,4 @@
-import { Button, Container, createStyles, Flex } from '@mantine/core';
+import { Button, Container, createStyles } from '@mantine/core';
 import { useGoogleLogin } from '@react-oauth/google';
 import { FC } from 'react';
 
@@ -24,11 +24,11 @@ const Login: FC = () => {
   });
 
   return (
-    <div className={classes.wrapper}>
+    <Container className={classes.wrapper}>
       <Button size="lg" onClick={() => googleLogin()}>
-        Login
+        LOGIN
       </Button>
-    </div>
+    </Container>
   );
 };
 
