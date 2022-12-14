@@ -1,4 +1,4 @@
-import { Loader } from '@mantine/core';
+import { Container, Loader } from '@mantine/core';
 import type { NextPage } from 'next';
 import { Suspense } from 'react';
 
@@ -8,9 +8,7 @@ import { Top } from '@/features/tasks/components';
 const Home: NextPage = () => {
   return (
     <Layout>
-      <Suspense fallback={<Loader />}>
-        <Top />
-      </Suspense>
+      <Top />
     </Layout>
   );
 };
