@@ -1,4 +1,4 @@
-import { TokenResponse } from '@react-oauth/google';
+import { googleLogout, TokenResponse } from '@react-oauth/google';
 import axios, { AxiosResponse } from 'axios';
 import { useAtom } from 'jotai';
 import { RESET } from 'jotai/utils';
@@ -23,11 +23,13 @@ export const useAuth = () => {
       headers: { Authorization: `Bearer ${res.access_token}` },
     });
     userInfo.data.accessToken = res.access_token;
+
     setUser(userInfo.data);
     router.push('/');
   };
 
   const logout = () => {
+    googleLogout();
     setUser(RESET);
   };
   return { login, logout, user, authenticatedUserChecked, accessToken: user?.accessToken };

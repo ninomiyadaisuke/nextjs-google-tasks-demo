@@ -3,7 +3,6 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useRouter } from 'next/router';
-import { SessionProvider } from 'next-auth/react';
 import { ReactNode } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 

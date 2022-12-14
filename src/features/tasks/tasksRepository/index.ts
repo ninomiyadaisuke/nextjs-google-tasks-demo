@@ -23,7 +23,6 @@ export const tasksRepository: TasksRepository = {
         Authorization: `Bearer ${token}`,
       },
     });
-
     return response.data.items;
   },
   getTasks: async (params: GetTasksParams, token: string): Promise<Task[]> => {

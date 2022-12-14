@@ -1,16 +1,16 @@
+import { Loader } from '@mantine/core';
 import type { NextPage } from 'next';
+import { Suspense } from 'react';
 
 import { Layout } from '@/components/layouts';
-import { useFetchTaskLists } from '@/features/tasks/hooks/useFetchTaskLists';
-import { useAuth } from '@/hooks/useAuth';
+import { Top } from '@/features/tasks/components';
 
 const Home: NextPage = () => {
-  const { logout } = useAuth();
-  const { data: taskLists } = useFetchTaskLists();
   return (
     <Layout>
-      <p>Top page</p>
-      <button onClick={() => logout()}>signout</button>
+      <Suspense fallback={<Loader />}>
+        <Top />
+      </Suspense>
     </Layout>
   );
 };
