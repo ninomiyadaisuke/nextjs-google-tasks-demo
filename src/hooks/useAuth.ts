@@ -1,22 +1,16 @@
-import { CredentialResponse } from '@react-oauth/google';
+import { googleLogout, TokenResponse } from '@react-oauth/google';
+import axios, { AxiosResponse } from 'axios';
 import { useAtom } from 'jotai';
 import { RESET } from 'jotai/utils';
-import jwtDecode from 'jwt-decode';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 
 import { authAtom } from '@/contexts/authContext';
-import { GoogleResponse } from '@/types/user';
+import { User } from '@/types/user';
 
 export const useAuth = () => {
   const [user, setUser] = useAtom(authAtom);
+
   const router = useRouter();
-
-  const [showChild, setShowChild] = useState(false);
-
-  useEffect(() => {
-    setShowChild(true);
-  }, []);
 
   const authenticatedUserChecked = async () => {
     if (!user) {
@@ -24,23 +18,25 @@ export const useAuth = () => {
     }
   };
 
-  const login = (res: CredentialResponse) => {
-    const userData = jwtDecode<GoogleResponse>(res.credential as string);
-    setUser({
-      email: userData.email,
-      email_verified: userData.email_verified,
-      family_name: userData.family_name,
-      given_name: userData.given_name,
-      name: userData.name,
-      picture: userData.picture,
-      token: res.credential,
+  const login = async (res: TokenResponse) => {
+    const userInfo: AxiosResponse<User, any> = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${res.access_token}` },
     });
+    userInfo.data.accessToken = res.access_token;
+
+    setUser(userInfo.data);
     router.push('/');
   };
 
   const logout = () => {
+    googleLogout();
     setUser(RESET);
   };
-
-  return { router, user, showChild, accessToken: user?.token, authenticatedUserChecked, login, logout };
+  return { login, logout, user, authenticatedUserChecked, accessToken: user?.accessToken };
 };
+
+// import { CredentialResponse } from '@react-oauth/google';
+// import jwtDecode from 'jwt-decode';
+// import { GoogleResponse } from '@/types/user';
+
+// const userData = jwtDecode<GoogleResponse>(res.credential as string);
