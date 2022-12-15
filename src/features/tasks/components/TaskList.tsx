@@ -27,9 +27,16 @@ const schema = yup.object({
 
 type Schema = typeof schema;
 
-const TaskList: FC = () => {
-  const { query } = useRouter();
-  const { taskListId } = query;
+type Props = {
+  taskListId: string;
+};
+
+const TaskList: FC<Props> = (props) => {
+  const { taskListId } = props;
+
+  const { data: tasks } = useFetchTaskList(taskListId);
+
+  const createTask = useAddTask(taskListId);
 
   const sendTodo = (values: FormValue) => {};
 
