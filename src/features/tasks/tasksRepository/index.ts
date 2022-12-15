@@ -25,6 +25,7 @@ export const tasksRepository: TasksRepository = {
     });
     return response.data.items;
   },
+
   getTasks: async (params: GetTasksParams, token: string): Promise<Task[]> => {
     const response = await api.get<TasksResponse>(
       `https://tasks.googleapis.com/tasks/v1/lists/${params.taskListId}/tasks?showCompleted=true&showHidden=true`,

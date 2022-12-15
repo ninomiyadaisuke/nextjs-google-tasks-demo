@@ -14,6 +14,7 @@ export const useApi = <
     options?: Omit<UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>, 'queryKey' | 'queryFn'>,
   ) => {
   const { accessToken } = useAuth();
+
   return useQuery({ queryKey, queryFn: async () => fetcher(queryKey[1], accessToken || ''), ...options });
 };
 
