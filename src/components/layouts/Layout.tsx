@@ -36,8 +36,8 @@ const Layout: FC<Props> = (props) => {
         >
           <ButtonList />
         </Suspense>
-        {children}
       </Container>
+      {children}
     </AuthGuard>
   );
 };
